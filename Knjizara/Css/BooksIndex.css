@@ -1,0 +1,25 @@
+﻿.lista {
+    padding: 2%;
+    margin: 0 auto;
+}
+
+.lista li {
+    height: 330px;
+    width: 15%;
+}
+
+.naslov {
+    font-size: 12px;
+}
+
+#dugme {
+    background-color: black;
+}
+
+#dugme:hover {
+    background-color: #ff6666;
+}
+
+.add:hover {
+    border-bottom: 1px solid black;
+}

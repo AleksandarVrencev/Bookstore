@@ -1,0 +1,70 @@
+﻿@model Knjizara.ViewModels.KnjigaSaZanrovima
+
+@{
+    ViewBag.Title = "Detaljnije";
+    Layout = "~/Views/Front-end/layout/front_end_layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/Css/AnimBook.css">
+<link rel="stylesheet" type="text/css" href="~/Css/Users.css">
+
+<h2>Detaljnije</h2>
+
+<!-- product category -->
+<section id="aa-product-details">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="aa-product-details-area">
+                    <div class="aa-product-details-content">
+                        <div class="row">
+                            <!-- Modal view slider -->
+                            <div class="col-md-5 col-sm-5 col-xs-12">
+                                <div class="aa-product-view-slider" style="background-color:white;">
+                                    <div id="demo-1" class="simpleLens-gallery-container">
+                                        <div class="book">
+                                            <div class="back"></div>
+                                            <div class="page6"><p style="font-size: 12px;">@Html.DisplayFor(modelItem => Model.knjiga.opis).ToString()</p></div>
+                                            <div class="page5"><img src="~/Images/bookmark.png" width="250" height="350" /></div>
+                                            <div class="page4"></div>
+                                            <div class="page3"></div>
+                                            <div class="page2"></div>
+                                            <div class="page1"></div>
+                                            <div class="front"><img src="~/Images/@Model.knjiga.slika" width="250" height="350" /></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal view content -->
+                            <div class="col-md-7 col-sm-7 col-xs-12">
+                                <div class="aa-product-view-content">
+                                    <h3>@Html.DisplayFor(modelItem => Model.knjiga.naziv).ToString().ToUpper()</h3>
+                                    <div class="aa-price-block">
+                                        <span class="aa-product-view-price">@Html.DisplayFor(modelItem => Model.knjiga.cena).ToString() RSD</span>
+                                        <p class="aa-product-avilability">@Html.DisplayFor(modelItem => Model.knjiga.Autori.ime).ToString()</p>
+                                    </div>
+                                    <p>@Html.DisplayFor(modelItem => Model.knjiga.opis).ToString()</p>
+                                    <div class="aa-prod-quantity">
+                                        <p class="aa-prod-category">
+                                            Zanr: 
+                                            @{
+                                                List<string> zanroviStringList = new List<string>();
+                                                Model.zanrovi.ForEach(z => zanroviStringList.Add(z.vrsta));
+                                                string zanrovi = string.Join(", ", zanroviStringList);
+                                            }
+                                            @Html.DisplayFor(modelItem => zanrovi)
+                                        </p>
+                                    </div>
+                                    <div class="aa-prod-view-bottom">
+                                        <a class="aa-add-to-cart-btn" href="@Url.Action("OrderNow", "ShoppingCart", new { id =  Model.knjiga.id_knjige })">Dodaj u korpu</a>
+                                        <a class="aa-add-to-cart-btn" href="@Url.Action("DodajOmiljeno", "FrontKnjige", new { id =  Model.knjiga.id_knjige })">Dodaj u omiljeno</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- / product category -->

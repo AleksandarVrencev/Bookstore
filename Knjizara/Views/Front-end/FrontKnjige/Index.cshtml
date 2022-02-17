@@ -1,0 +1,118 @@
+﻿@model Knjizara.ViewModels.KnjigaZanroviViewModel
+
+@{
+    Layout = "~/Views/Front-end/layout/front_end_layout.cshtml";
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/zanrovi.js"></script>
+<script src="~/Scripts/SearchPost.js"></script>
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="~/Css/BooksIndex.css">
+<link rel="stylesheet" type="text/css" href="~/Css/Users.css">
+<link rel="stylesheet" type="text/css" href="~/Css/Paging.css">
+<link rel="stylesheet" type="text/css" href="~/Css/BtnModal.css">
+
+<h2>Knjige</h2>
+
+<!-- search box -->
+@using (Html.BeginForm("Index", "FrontKnjige", FormMethod.Get))
+{
+    <div class="aa-search-box" style="display: flex; justify-content: center">
+        <div class="input-group margin-bottom-sm" style="display: flex">
+            <button type="submit" class="input-group-addon form-control" style="background-color: #ff6666; color: white; width: 40px; height: 40px;"><i class="fa fa-search"></i></button>
+            @Html.TextBox("search", null, new { @style = "width: 50rem;"})
+        </div>
+    </div>
+}
+<!-- / search box -->
+
+<table class=" table">
+    <ul id="myTable" class="aa-product-catg lista">
+        @foreach (var item in Model.KnjigeSaZanrovima)
+        {
+            <!-- start single product item -->
+            <li>
+                @*id="myGenre"*@
+                <figure id="iWant">
+                    <a class="aa-product-img" href="#" style="background-color: white">
+                        <img src="~/Images/@item.knjiga.slika" width="150" height="220" /><br>
+                    </a>
+                    <div class="add">
+                        @if (Session["id_osoba"] != null)
+                        {
+                            @Html.ActionLink("Dodaj u korpu", "OrderNow", "ShoppingCart", new { id = item.knjiga.id_knjige }, null)
+                        }
+                        else
+                        {
+                            <a class="btn" href="#article-editor" data-toggle="modal">
+                                Dodaj u korpu
+                            </a>
+                        }
+                    </div>
+                    <figcaption>
+                        <h4 class="aa-product-title naslov"><a href="#">@Html.DisplayFor(modelItem => item.knjiga.naziv).ToString().ToUpper()</a></h4>
+                        <h4 class="aa-product-title naslov"><a href="#">@Html.DisplayFor(modelItem => item.knjiga.Autori.ime).ToString()</a></h4>
+                        <span class="aa-product-price">@Html.DisplayFor(modelItem => item.knjiga.cena) RSD</span><span class="aa-product-price"><del></del></span>
+                    </figcaption>
+                </figure>
+                <div class="aa-product-hvr-content">
+                    @if (Session["id_osoba"] != null)
+                    {
+                        <a id="dugme" href="@Url.Action("DodajOmiljeno", "FrontKnjige", new { id =  item.knjiga.id_knjige })" data-toggle="tooltip" data-placement="top" title="Dodaj u omiljeno"><span class="fas fa-heart" style="color: white"></span></a>
+                    }
+                    <a id="dugme" href="@Url.Action("Detaljnije", "FrontKnjige", new { id =  item.knjiga.id_knjige })" data-toggle2="tooltip" data-placement="top" title="Detaljnije"><span class="fa fa-search" style="color: white"></span></a>
+                </div>
+                <!-- product badge -->
+            </li>
+        }
+    </ul>
+
+</table>
+
+<ul class="pagination paging">
+    <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a>
+    </li>
+    @for (int i = 1; i <= Model.PageCount; i++)
+    {
+        <li class="page-item">
+            @if (i != Model.CurrentPageIndex)
+            {
+                @Html.ActionLink(i.ToString(), "Index", "FrontKnjige", new { currentPage = i, @class = "page-link" }, null)
+            }
+            else
+            {
+                <span id="aktivna">@i</span>
+            }
+        </li>
+    }
+    <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a>
+    </li>
+</ul>
+
+<script>
+    var aktivna = document.getElementById("aktivna");
+
+    if (aktivna != @Model.CurrentPageIndex) {
+        aktivna.style.background = "blue";
+        aktivna.style.color = "white";
+    }
+</script>
+
+<!-- Modal -->
+<div class="modal fade" id="article-editor">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">&times;</a>
+        <h3 style="text-align: center;">Prvo se prijavite ili registrujte.</h3>
+    </div>
+    <div class="row" style="display: flex; justify-content:space-around;">
+        <div class="col-4 text-center btn"><a class="dugme" href="@Url.Action("Prijava", "Korisnici")">Prijavite se</a></div>
+        <div class="col-4 text-center btn"><a class="dugme" href="@Url.Action("Create", "Korisnici")">Registrujte se</a></div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>
+    </div>
+</div>
+<!-- / Modal -->
